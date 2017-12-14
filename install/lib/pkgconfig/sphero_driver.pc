@@ -1,0 +1,8 @@
+prefix=/home/manish/Awesomestuff/classes/HRI-F-2k17/projectws/install
+
+Name: sphero_driver
+Description: Description of sphero_driver
+Version: 0.1.2
+Cflags: 
+Libs: -L/home/manish/Awesomestuff/classes/HRI-F-2k17/projectws/install/lib 
+Requires: 

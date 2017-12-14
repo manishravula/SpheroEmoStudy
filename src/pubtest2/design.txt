@@ -1,0 +1,73 @@
+"""
+Design choice: Should the individuals and the data be the same?
+
+Answer:
+ NO.
+ If one is messed up, the other can't be too.
+ Also, it logically makes sense to seperate them
+
+"""
+
+"""
+Design question: How should the data be stored?
+
+
+Choices:
+    As experimenter_index + feeling + config + fitness value + timestamp
+
+Filetype: CSV: reason, easy to read
+                not too many data points anyway
+                No new learning required.
+
+user_id = 0
+Show instructions
+
+
+Demo common stuff
+    common_feedback=[]
+    for feeling in all_feelings:
+        common_feedback_emotion = []
+        for behavior in common_behavior:
+            fitness = demo(behavior)
+            common_feedback_emotion.append([behavior,fitness])
+        common_feedback.append([feeling,fitness])
+    save(common_feedback)
+
+user_id +=1
+
+Do evolutionary stuff
+
+if user_id ==1:
+    #first user, so collect samples.
+    n_samplesPerFeeling = 20
+    create_inspyredInstances(3)
+
+
+    #initial_population = []
+    #data_population = []
+
+
+    for feeling in all_feelings:
+        feeling_initial_population = []
+        for config in initial_population_samples:
+            fitness = demo(behavior)
+            csv_save(fitness)
+            population.append(individual_initials)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

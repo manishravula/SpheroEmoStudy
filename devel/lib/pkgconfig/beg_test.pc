@@ -1,0 +1,8 @@
+prefix=/home/manish/Awesomestuff/classes/HRI-F-2k17/projectws/devel
+
+Name: beg_test
+Description: Description of beg_test
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/manish/Awesomestuff/classes/HRI-F-2k17/projectws/devel/lib 
+Requires: 
