@@ -10,7 +10,7 @@ STABLE_POPULATION_SIZE = 20
 NUM_OFFSPRING = 10 # for each population for each generation
 REPEAT_EVERY_N_GEN = 3 # repeat fitness evaluation
 MUTATION_CHANCE = 0.1
-NAME_PREFIX = 'state_ga_'
+NAME_PREFIX = 'ga_data/state_ga_'
 
 # 12 different behaviors possible for each action
 alleles = ['rest',

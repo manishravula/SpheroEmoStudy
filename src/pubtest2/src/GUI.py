@@ -6,7 +6,7 @@ FEELINGS = ['Happy','Sad','Confusion','Other']
 
 class Application(Frame):
 
-    def __init__(self ,logfilename):
+    def __init__(self ):
         root = Tk()
         root.resizable(width=False, height=False)
         root.geometry('{}x{}'.format(1200, 400))
@@ -14,7 +14,7 @@ class Application(Frame):
         self.master = root
         self.pack()
         self.create_widgets()
-        self.file = open(logfilename+'.txt','a')
+        # self.file = open(logfilename+'.txt','a')
         self.collected_data = []
 
 
@@ -95,17 +95,17 @@ class Application(Frame):
 
 
     def writeFile(self,feeling_name,intensity_value):
-        self.file.write("{} {} \n".format(feeling_name,intensity_value))
+        # self.file.write("{} {} \n".format(feeling_name,intensity_value))
         self.collected_data = [FEELINGS.index(feeling_name),intensity_value]
         self.t.destroy()
 
 
 
-def experiment(logfilename):
-    app = Application(logfilename)
+def experiment():
+    app = Application()
     app.mainloop()
-    app.file.close()
+    # app.file.close()
     return app.collected_data
 
-a = experiment('test')
-print(a)
+# a = experiment('test')
+# print(a)

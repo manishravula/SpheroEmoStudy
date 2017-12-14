@@ -14,6 +14,7 @@ import pickle
 import time
 import glob
 from GUI import experiment as getFeedback
+from DemoNotification import show_experiment_notification
 
 
 PRIMITIVES_CONFIGS = collections.OrderedDict() #Ordered dict with values as [amplitudes,frequency]
@@ -41,7 +42,7 @@ PRIMITIVES_CONFIGS['spin_backward_fast']=[100,-100,1]
 
 N_PRIMITIVES =  len(PRIMITIVES_CONFIGS)
 
-DURATION_PRIMITIVE = 5 #sec
+DURATION_PRIMITIVE = 3 #sec
 
 # hyperparameters
 INITIAL_POPULATION_SIZE = 20
@@ -49,7 +50,7 @@ STABLE_POPULATION_SIZE = 20
 NUM_OFFSPRING = 10 # for each population for each generation
 REPEAT_EVERY_N_GEN = 3 # repeat fitness evaluation
 MUTATION_CHANCE = 0.1
-NAME_PREFIX = 'state_ga_'
+NAME_PREFIX = '/home/manish/Awesomestuff/classes/HRI-F-2k17/projectws/src/pubtest2/src/ga_data_'
 
 # 12 different behaviors possible for each action
 alleles = ['rest',
@@ -67,6 +68,8 @@ NUM_ACTIONS = 3 # Number of actions for each pattern
 
 COMMON_LOG = 'common_log'
 USER_LOG = 'user_log'
+USER_LOG_FILE = open('/home/manish/Awesomestuff/classes/HRI-F-2k17/projectws/src/pubtest2/src/logs/usr_log.txt','a')
+COMMON_LOG_FILE = open('/home/manish/Awesomestuff/classes/HRI-F-2k17/projectws/src/pubtest2/src/logs/common_log.txt','a')
 
 rospy.init_node('cmdtest',anonymous=True)
 pub_velocity = rospy.Publisher('cmd_vel',Twist,queue_size=10)
@@ -180,28 +183,6 @@ def save(generation, pop1, pop2, pop3, fitness):
     save_state(obj)
     return
 
-def run_experiment(pattern):
-    # TODO
-    #print(pattern)
-    #label = input("label: ")
-    #value = input("value: ")
-    #return int(label), int(value)
-    to_pattern = list(pattern)
-    execute_sequence(to_pattern)
-    label,value = getFeedback(COMMON_LOG)
-    return label,value
-
-
-def choice_curr(ls,weights,n_items):
-    indices = np.arange(len(ls))
-    normalized_weights = np.copy(weights).astype('float')/np.sum(weights)
-    # print(np.sum(normalized_weights))
-
-    chosen_indices = np.random.choice(indices,n_items,False,normalized_weights)
-    chosen_elements =[]
-    for idx in chosen_indices:
-        chosen_elements.append(ls[idx])
-    return chosen_elements
 
 def get_latest_state():
     all_state_names = glob.glob(NAME_PREFIX+'*')
@@ -221,6 +202,45 @@ def save_state(obj):
     return
 
 
+def run_experiment(pattern):
+    # TODO
+    #print(pattern)
+    #label = input("label: ")
+    #value = input("value: ")
+    #return int(label), int(value)
+    to_pattern = list(pattern)
+
+    command_file = open("/home/manish/Awesomestuff/classes/HRI-F-2k17/projectws/flag.txt",'w+')
+    command_file.write(str(to_pattern))
+    command_file.close()
+
+    show_experiment_notification()
+
+    label,value = getFeedback()
+    command_file = open("flag.txt", 'w+')
+    # command_file.write('')
+    command_file.close()
+
+    USER_LOG_FILE.write("{} for USER {} and pattern {} the observed label,value are {} {} \n".format(time.asctime(),USER_ID,to_pattern,label,value))
+
+    #TODO: check that the file is being written and saved properly.
+
+    return label,value
+
+
+def choice_curr(ls,weights,n_items):
+    indices = np.arange(len(ls))
+    normalized_weights = np.copy(weights).astype('float')/np.sum(weights)
+    # print(np.sum(normalized_weights))
+
+    chosen_indices = np.random.choice(indices,n_items,False,normalized_weights)
+    chosen_elements =[]
+    for idx in chosen_indices:
+        chosen_elements.append(ls[idx])
+    return chosen_elements
+
+
+
 
 
 generation = 0
@@ -232,6 +252,7 @@ pops = [pop1,pop2,pop3]
 exp_list = set()
 exp_count = 0
 
+USER_ID = input('Enter the user ID: \n')
 
 
 # main loop
@@ -318,6 +339,6 @@ for pop in pops:
     for i in pop:
         print(fitness[i][index], i, fitness[i][3])
 print(exp_count)
-
-
+USER_LOG_FILE.close()
+COMMON_LOG_FILE.close()
 
