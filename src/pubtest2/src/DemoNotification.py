@@ -18,7 +18,7 @@ class Application(Frame):
         self.winfo_toplevel().title("Experiment Notification")
         w = Text()
         w.tag_configure("center", justify="center")
-        w.insert(INSERT, "The Experiment is about to begin! Ready? Excited? Go!")
+        w.insert(INSERT, "The Experiment is about to begin! Ready? \n \n Go!")
         w.config(font=("Arial bold", 40))
         w.config(pady=150)
         w.tag_add("center", "1.0", "end")

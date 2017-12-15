@@ -49,7 +49,7 @@ STABLE_POPULATION_SIZE = 20
 NUM_OFFSPRING = 10 # for each population for each generation
 REPEAT_EVERY_N_GEN = 3 # repeat fitness evaluation
 MUTATION_CHANCE = 0.1
-NAME_PREFIX = '/home/manish/Awesomestuff/classes/HRI-F-2k17/projectws/src/pubtest2/src/ga_data_'
+NAME_PREFIX = '/home/manish/Awesomestuff/classes/HRI-F-2k17/projectws/src/pubtest2/src/ga_data/'
 
 # 12 different behaviors possible for each action
 alleles = ['rest',
@@ -184,11 +184,14 @@ def save(generation, pop1, pop2, pop3, fitness):
 
 
 def get_latest_state():
-    all_state_names = glob.glob(NAME_PREFIX+'*')
+    all_state_names = glob.glob(NAME_PREFIX+'2017*')
     all_state_names.sort()
     if len(all_state_names):
-        latest_stateName = all_state_names[0]
+        latest_stateName = all_state_names[-1]
+        # print(latest_stateName)
         latest_state = pickle.load(open(latest_stateName,'r'))
+        print('The latest_state {}'.format(latest_stateName))
+        print(latest_state)
         return latest_state
     else:
         return [1,set(),set(),set(),{}]
@@ -198,6 +201,7 @@ def save_state(obj):
     curr_timeStr = time.strftime("%Y%b%a:%d:%Y:%H:%M:%S")
     state_name = NAME_PREFIX+curr_timeStr
     pickle.dump(obj,open(state_name,'w+'))
+    print('saved at {}'.format(state_name))
     return
 
 

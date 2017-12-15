@@ -10,7 +10,7 @@ STABLE_POPULATION_SIZE = 20
 NUM_OFFSPRING = 10 # for each population for each generation
 REPEAT_EVERY_N_GEN = 3 # repeat fitness evaluation
 MUTATION_CHANCE = 0.1
-NAME_PREFIX = 'ga_data/state_ga_'
+NAME_PREFIX = 'ga_data/Dummy/state_ga_'
 
 # 12 different behaviors possible for each action
 alleles = ['rest',
@@ -57,7 +57,9 @@ def run_experiment(pattern):
     #label = input("label: ")
     #value = input("value: ")
     #return int(label), int(value)
-    return pattern[0]%3, sum(list(pattern))
+    label = np.random.randint(0,4,1)[0]
+    value = np.random.randint(0,6,1)[0]
+    return label, value
 
 def choice_curr(ls,weights,n_items):
     indices = np.arange(len(ls))
@@ -74,7 +76,7 @@ def get_latest_state():
     all_state_names = glob.glob(NAME_PREFIX+'*')
     all_state_names.sort()
     if len(all_state_names):
-        latest_stateName = all_state_names[0]
+        latest_stateName = all_state_names[-1]
         latest_state = pickle.load(open(latest_stateName,'r'))
         return latest_state
     else:
@@ -98,14 +100,18 @@ pop3 = set()
 pops = [pop1,pop2,pop3]
 exp_list = set()
 exp_count = 0
+latest_state = [generation,pop1,pop2,pop3,fitness]
 
 
 
 # main loop
 while True:
+    print generation
+    print len(exp_list)
     try:
         #What to load in the first time?
         generation, pop1, pop2, pop3, fitness = get_latest_state() #load() #TODO: Add back in when load is implemented
+
     except ValueError:
         print("Unpacking went wrong check the get_latest_function")
         break
@@ -152,7 +158,7 @@ while True:
                         if rand.random() < 0.5:
                             templist = list(child1)
                             templist[index] = rand.randrange(NUM_ACTIONS)
-                            child2 = tuple(templist)
+                            child1 = tuple(templist)
                         else:
                             templist = list(child2)
                             templist[index] = rand.randrange(NUM_ACTIONS)
@@ -169,14 +175,15 @@ while True:
         label, value = run_experiment(current_exp)
         exp_count += 1
         fit0, fit1, fit2, n_seen = fitness[current_exp]
-        fitness[current_exp] = ((n_seen*fit0 + value*(label==0))/(n_seen+1),
-                                (n_seen*fit1 + value*(label==1))/(n_seen+1),
-                                (n_seen*fit2 + value*(label==2))/(n_seen+1),
+        fitness[current_exp] = ((n_seen*fit0 + value*(label==0))/(n_seen+1.0),
+                                (n_seen*fit1 + value*(label==1))/(n_seen+1.0),
+                                (n_seen*fit2 + value*(label==2))/(n_seen+1.0),
                                 n_seen+1)
         if fitness[current_exp][3] >= generation // REPEAT_EVERY_N_GEN + 2:
             exp_list.remove(current_exp)
     # save(...) TODO
     save(generation,pop1,pop2,pop3,fitness)
+    # latest_state = [generation,pop1,pop2,pop3,fitness]
     if generation == 100:
         break
 for pop in pops:

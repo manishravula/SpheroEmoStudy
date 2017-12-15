@@ -50,7 +50,7 @@ STABLE_POPULATION_SIZE = 20
 NUM_OFFSPRING = 10 # for each population for each generation
 REPEAT_EVERY_N_GEN = 3 # repeat fitness evaluation
 MUTATION_CHANCE = 0.1
-NAME_PREFIX = '/home/manish/Awesomestuff/classes/HRI-F-2k17/projectws/src/pubtest2/src/ga_data_'
+NAME_PREFIX = '/home/manish/Awesomestuff/classes/HRI-F-2k17/projectws/src/pubtest2/src/ga_data/'
 
 # 12 different behaviors possible for each action
 alleles = ['rest',
@@ -185,11 +185,14 @@ def save(generation, pop1, pop2, pop3, fitness):
 
 
 def get_latest_state():
-    all_state_names = glob.glob(NAME_PREFIX+'*')
+    all_state_names = glob.glob(NAME_PREFIX+'2017*')
     all_state_names.sort()
     if len(all_state_names):
-        latest_stateName = all_state_names[0]
+        latest_stateName = all_state_names[-1]
+        # print(latest_stateName)
         latest_state = pickle.load(open(latest_stateName,'r'))
+        print('The latest_state {}'.format(latest_stateName))
+        print(latest_state)
         return latest_state
     else:
         return [1,set(),set(),set(),{}]
@@ -199,6 +202,7 @@ def save_state(obj):
     curr_timeStr = time.strftime("%Y%b%a:%d:%Y:%H:%M:%S")
     state_name = NAME_PREFIX+curr_timeStr
     pickle.dump(obj,open(state_name,'w+'))
+    print('saved at {}'.format(state_name))
     return
 
 
@@ -217,9 +221,9 @@ def run_experiment(pattern):
     show_experiment_notification()
 
     label,value = getFeedback()
-    command_file = open("flag.txt", 'w+')
+    # command_file = open("flag.txt", 'w+')
     # command_file.write('')
-    command_file.close()
+    # command_file.close()
 
     USER_LOG_FILE.write("{} for USER {} and pattern {} the observed label,value are {} {} \n".format(time.asctime(),USER_ID,to_pattern,label,value))
 
@@ -306,7 +310,7 @@ while True:
                         if rand.random() < 0.5:
                             templist = list(child1)
                             templist[index] = rand.randrange(NUM_ACTIONS)
-                            child2 = tuple(templist)
+                            child1 = tuple(templist)
                         else:
                             templist = list(child2)
                             templist[index] = rand.randrange(NUM_ACTIONS)
@@ -321,12 +325,17 @@ while True:
         current_exp = rand.sample(exp_list,1)[0]
         # labels: 0:happy, 1:sad, 2:confused
         label, value = run_experiment(current_exp)
+        print('--')
+        print(label,value)
         exp_count += 1
         fit0, fit1, fit2, n_seen = fitness[current_exp]
-        fitness[current_exp] = ((n_seen*fit0 + value*(label==0))/(n_seen+1),
-                                (n_seen*fit1 + value*(label==1))/(n_seen+1),
-                                (n_seen*fit2 + value*(label==2))/(n_seen+1),
+        print(fitness[current_exp])
+        fitness[current_exp] = ((n_seen*fit0 + value*(label==0))/(n_seen+1.0),
+                                (n_seen*fit1 + value*(label==1))/(n_seen+1.0),
+                                (n_seen*fit2 + value*(label==2))/(n_seen+1.0),
                                 n_seen+1)
+        print(fitness[current_exp])
+        print('--')
         if fitness[current_exp][3] >= generation // REPEAT_EVERY_N_GEN + 2:
             exp_list.remove(current_exp)
     # save(...) TODO

@@ -9,7 +9,7 @@ class Application(Frame):
     def __init__(self ):
         root = Tk()
         root.resizable(width=False, height=False)
-        root.geometry('{}x{}'.format(1200, 400))
+        root.geometry('{}x{}'.format(1800, 400))
         Frame.__init__(self)
         self.master = root
         self.pack()
@@ -33,7 +33,7 @@ class Application(Frame):
         self.QUIT["text"] = "QUIT THE PROGRAM"
         self.QUIT["fg"] = "red"
         self.QUIT["command"] = self.quit
-        self.QUIT.config(height = 5, width = 20)
+        self.QUIT.config(height = 5, width = 20,font=("Arial",10))
         # self.QUIT.config(height=200, width=100)
         self.QUIT.pack({"side": "right"})
 
@@ -54,20 +54,21 @@ class Application(Frame):
                 return self.create_window(feeling_name)
             obj = button_callback(self.create_window,feeling_name)
             curr_button["command"]= obj.call_func
-            curr_button.config(height=5,width=20)
+            curr_button.config(height=5,width=20,font=("Arial",10))
             curr_button.pack({"side": "left"})
 
 
     def create_window(self,feeling_name):
 
         t = Tk()
+        # root.geometry('{}x{}'.format(1800, 400))
         self.t = t
         self.master.destroy()
         t.wm_title("Select the Intensity")
 
         if feeling_name is not "None_of_the_above":
-            l = Label(t, text="Ok then, how strong do you think it is expressing the emotion '{}'?".format(feeling_name))
-            l.config(font=("Courier", 20))
+            l = Label(t, text="Ok, then, how strong do you think it is expressing the emotion '{}'?".format(feeling_name))
+            l.config(font=("Arial", 20))
             l.pack(side="top", fill="both", expand=True, padx=100, pady=100)
 
 
@@ -84,7 +85,7 @@ class Application(Frame):
                 h1 = Button(t)
                 h1["text"] = intensity_likertTag
                 h1["fg"] = "red"
-                h1.config(height=5, width=20)
+                h1.config(height=5, width=20,font=("Arial",10))
                 obj = button_callback(self.writeFile,feeling_name,intensity_value)
                 h1["command"] = obj.callmethod
                 h1.pack({"anchor": "center"})
